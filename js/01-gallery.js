@@ -7,9 +7,7 @@ console.log(galleryItems)
 const gallery = document.querySelector('.gallery')
 
 //Tworzenie div item
-
 galleryItems.forEach(n => {
-	//console.log(n.preview)
 	const galleryItem = `<div class="gallery__item">
 <a class="gallery__link" href="${n.original}">
   <img
@@ -24,22 +22,28 @@ galleryItems.forEach(n => {
 	gallery.insertAdjacentHTML('afterbegin', galleryItem)
 })
 //=======================================================
-//Tworzenie delegowania zdarzeń
 
+//Tworzenie delegowania zdarzeń na div gallery
 const selectImg = e => {
 	e.preventDefault()
 	if (e.target.nodeName !== 'IMG') {
 		return
 	}
-	const selectLargeImg = e.target.dataset.source
+	const srcLargeImg = e.target.dataset.source
 
-	//console.log(selectLargeImg)
+	//Użycie biblioteki lightbox do wyświetlania img na pełnym ekranie
+	const instance = basicLightbox.create(`<img src="${srcLargeImg}">`)
+	instance.show()
 
-	const galleryLargeItem = document.querySelector('.gallery__image')
-	// console.log(galleryLargeItem)
-	// console.log(galleryLargeItem.dataset.source)
+	//Zamknięcie przy pomocy klawisza Escape
+	const closeImg = () => {
+		const visible = instance.visible()
+		if (visible === true) {
+			instance.close()
+		}
+	}
 
-	galleryLargeItem.setAttribute('src', galleryLargeItem.dataset.source)
+	gallery.addEventListener('keydown', closeImg)
 }
 
 //Implementacja delegowania
